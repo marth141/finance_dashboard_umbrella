@@ -1,0 +1,41 @@
+<h1>Listing Bills</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, FinanceDashboardWeb.BillLive.FormComponent,
+    id: @bill.id || :new,
+    title: @page_title,
+    action: @live_action,
+    bill: @bill,
+    return_to: Routes.bill_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Initial due date</th>
+      <th>Amount</th>
+      <th>Paid</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="bills">
+    <%= for bill <- @bills do %>
+      <tr id="bill-<%= bill.id %>">
+        <td><%= bill.name %></td>
+        <td><%= bill.initial_due_date %></td>
+        <td><%= bill.amount %></td>
+        <td><%= bill.paid %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.bill_show_path(@socket, :show, bill) %></span>
+          <span><%= live_patch "Edit", to: Routes.bill_index_path(@socket, :edit, bill) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: bill.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Bill", to: Routes.bill_index_path(@socket, :new) %></span>

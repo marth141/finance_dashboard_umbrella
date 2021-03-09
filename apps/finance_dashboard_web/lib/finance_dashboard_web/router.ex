@@ -65,6 +65,13 @@ defmodule FinanceDashboardWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    live "/bills", BillLive.Index, :index
+    live "/bills/new", BillLive.Index, :new
+    live "/bills/:id/edit", BillLive.Index, :edit
+
+    live "/bills/:id", BillLive.Show, :show
+    live "/bills/:id/show/edit", BillLive.Show, :edit
   end
 
   scope "/", FinanceDashboardWeb do

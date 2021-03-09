@@ -1,0 +1,37 @@
+<h1>Show Bill</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, FinanceDashboardWeb.BillLive.FormComponent,
+    id: @bill.id,
+    title: @page_title,
+    action: @live_action,
+    bill: @bill,
+    return_to: Routes.bill_show_path(@socket, :show, @bill) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @bill.name %>
+  </li>
+
+  <li>
+    <strong>Initial due date:</strong>
+    <%= @bill.initial_due_date %>
+  </li>
+
+  <li>
+    <strong>Amount:</strong>
+    <%= @bill.amount %>
+  </li>
+
+  <li>
+    <strong>Paid:</strong>
+    <%= @bill.paid %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.bill_show_path(@socket, :edit, @bill), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.bill_index_path(@socket, :index) %></span>
