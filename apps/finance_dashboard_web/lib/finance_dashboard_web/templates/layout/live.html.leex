@@ -198,24 +198,16 @@
     </div>
     <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none" tabindex="0">
       <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-        </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <main role="main">
             <p class="alert alert-info" role="alert"
                 phx-click="lv:clear-flash"
                 phx-value-key="info"><%= live_flash(@flash, :info) %></p>
-
             <p class="alert alert-danger" role="alert"
                 phx-click="lv:clear-flash"
                 phx-value-key="error"><%= live_flash(@flash, :error) %></p>
-
             <%= @inner_content %>
           </main>
-          <div class="py-4">
-            <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-          </div>
           <!-- /End replace -->
         </div>
       </div>
