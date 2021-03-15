@@ -4,7 +4,7 @@ defmodule FinanceDashboard.Accounts.Bill do
 
   schema "bills" do
     field :amount, :decimal
-    field :initial_due_date, :utc_datetime
+    field :initial_due_date, :date
     field :name, :string
     field :paid, :boolean, default: false
 

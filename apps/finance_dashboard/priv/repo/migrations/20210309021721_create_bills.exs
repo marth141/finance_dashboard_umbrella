@@ -4,7 +4,7 @@ defmodule FinanceDashboard.Repo.Migrations.CreateBills do
   def change do
     create table(:bills) do
       add :name, :string
-      add :initial_due_date, :utc_datetime
+      add :initial_due_date, :date
       add :amount, :decimal
       add :paid, :boolean, default: false, null: false
 
