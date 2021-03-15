@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  width:100%;
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
