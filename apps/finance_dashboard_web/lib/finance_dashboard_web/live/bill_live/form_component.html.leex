@@ -1,26 +1,30 @@
 <h2><%= @title %></h2>
-
 <%= f = form_for @changeset, "#",
   id: "bill-form",
   phx_target: @myself,
   phx_change: "validate",
   phx_submit: "save" %>
-
-  <%= label f, :name %>
-  <%= text_input f, :name %>
+<div class="col-span-6 sm:col-span-3">
+  <%= label f, :name, class: "block text-sm font-medium text-gray-700" %>
+  <%= text_input f, :name, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   <%= error_tag f, :name %>
-
-  <%= label f, :initial_due_date %>
-  <%= datetime_select f, :initial_due_date %>
+</div>
+<div class="col-span-6 sm:col-span-3">
+  <%= label f, :initial_due_date, class: "block text-sm font-medium text-gray-700" %>
+  <%= my_date_select f, :initial_due_date %>
   <%= error_tag f, :initial_due_date %>
-
-  <%= label f, :amount %>
-  <%= number_input f, :amount, step: "any" %>
+</div>
+<div class="col-span-6 sm:col-span-3">
+  <%= label f, :amount, class: "block text-sm font-medium text-gray-700" %>
+  <%= number_input f, :amount, step: "any", class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   <%= error_tag f, :amount %>
-
-  <%= label f, :paid %>
+</div>
+<div class="col-span-6 sm:col-span-3">
+  <%= label f, :paid, class: "block text-sm font-medium text-gray-700" %>
   <%= checkbox f, :paid %>
   <%= error_tag f, :paid %>
-
-  <%= submit "Save", phx_disable_with: "Saving..." %>
+</div>
+<div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+  <%= submit "Save", phx_disable_with: "Saving...", class: "bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+</div>
 </form>
