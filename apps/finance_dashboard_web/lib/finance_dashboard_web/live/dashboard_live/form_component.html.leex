@@ -1,0 +1,16 @@
+<%= f = form_for @changeset, "#",
+  id: "bill-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+<div class="flex justify-center">
+  <div class="col-span-6 sm:col-span-3">
+    <%= label f, :paid, class: "block text-sm font-medium text-gray-700" %>
+    <%= checkbox f, :paid %>
+    <%= error_tag f, :paid %>
+  </div>
+</div>
+<div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+  <%= submit "Save", phx_disable_with: "Saving...", class: "bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+</div>
+</form>
