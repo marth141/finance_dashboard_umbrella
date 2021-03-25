@@ -74,6 +74,7 @@ defmodule FinanceDashboardWeb.Router do
     live "/bills/:id/show/edit", BillLive.Show, :edit
 
     live "/dashboards/bills/", DashboardLive.Index, :index
+    live "/dashboards/bills/:id/edit", DashboardLive.Index, :edit
   end
 
   scope "/", FinanceDashboardWeb do
