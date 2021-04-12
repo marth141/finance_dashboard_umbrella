@@ -6,6 +6,9 @@
     bill: @bill,
     return_to: Routes.dashboard_index_path(@socket, :index) %>
 <% end %>
+<%= f = form_for @income_changeset, Routes.dashboard_index_path(@socket, :index), [phx_change: "income_change"] %>
+<%= number_input f, :income_value %>
+</form>
 <form phx-change="income_change">
   <label>
     <label class="block text-sm font-medium text-gray-700">Income Value</label>

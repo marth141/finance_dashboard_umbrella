@@ -16,7 +16,13 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
        :total_bills,
        total_bills
      )
-     |> assign(:income_value_difference, get_difference(total_bills, 0))}
+     |> assign(:income_value_difference, get_difference(total_bills, 0))
+     |> assign(
+       :income_changeset,
+       FinanceDashboardWeb.DashboardLive.IncomeValue.changeset(
+         FinanceDashboardWeb.DashboardLive.IncomeValue.__struct__(%{income_value: 0})
+       )
+     )}
   end
 
   @impl true
