@@ -505,8 +505,18 @@ defmodule FinanceDashboard.AccountsTest do
   describe "bills" do
     alias FinanceDashboard.Accounts.Bill
 
-    @valid_attrs %{amount: "120.5", initial_due_date: "2010-04-17T14:00:00Z", name: "some name", paid: true}
-    @update_attrs %{amount: "456.7", initial_due_date: "2011-05-18T15:01:01Z", name: "some updated name", paid: false}
+    @valid_attrs %{
+      amount: "120.5",
+      initial_due_date: ~D[2010-04-17],
+      name: "some name",
+      paid: true
+    }
+    @update_attrs %{
+      amount: "456.7",
+      initial_due_date: ~D[2011-05-18],
+      name: "some updated name",
+      paid: false
+    }
     @invalid_attrs %{amount: nil, initial_due_date: nil, name: nil, paid: nil}
 
     def bill_fixture(attrs \\ %{}) do
@@ -531,7 +541,7 @@ defmodule FinanceDashboard.AccountsTest do
     test "create_bill/1 with valid data creates a bill" do
       assert {:ok, %Bill{} = bill} = Accounts.create_bill(@valid_attrs)
       assert bill.amount == Decimal.new("120.5")
-      assert bill.initial_due_date == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
+      assert bill.initial_due_date == ~D[2010-04-17]
       assert bill.name == "some name"
       assert bill.paid == true
     end
@@ -544,7 +554,7 @@ defmodule FinanceDashboard.AccountsTest do
       bill = bill_fixture()
       assert {:ok, %Bill{} = bill} = Accounts.update_bill(bill, @update_attrs)
       assert bill.amount == Decimal.new("456.7")
-      assert bill.initial_due_date == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+      assert bill.initial_due_date == ~D[2011-05-18]
       assert bill.name == "some updated name"
       assert bill.paid == false
     end

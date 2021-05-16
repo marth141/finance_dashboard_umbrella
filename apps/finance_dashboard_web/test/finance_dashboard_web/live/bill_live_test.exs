@@ -5,8 +5,8 @@ defmodule FinanceDashboardWeb.BillLiveTest do
 
   alias FinanceDashboard.Accounts
 
-  @create_attrs %{amount: "120.5", initial_due_date: "2010-04-17T14:00:00Z", name: "some name", paid: true}
-  @update_attrs %{amount: "456.7", initial_due_date: "2011-05-18T15:01:01Z", name: "some updated name", paid: false}
+  @create_attrs %{amount: "120.5", initial_due_date: ~D[2010-04-17], name: "some name", paid: true}
+  @update_attrs %{amount: "456.7", initial_due_date: ~D[2011-05-18], name: "some updated name", paid: false}
   @invalid_attrs %{amount: nil, initial_due_date: nil, name: nil, paid: nil}
 
   defp fixture(:bill) do
