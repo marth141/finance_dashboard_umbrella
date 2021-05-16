@@ -5,6 +5,10 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      :timer.send_interval(1000, self(), :tick)
+    end
+
     total_bills = Enum.reduce(list_bills(), 0, fn bill, acc -> Decimal.sub(acc, bill.amount) end)
 
     {:ok,
@@ -22,7 +26,8 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
        FinanceDashboardWeb.DashboardLive.IncomeValue.changeset(
          FinanceDashboardWeb.DashboardLive.IncomeValue.__struct__(%{income_value: 0})
        )
-     )}
+     )
+     |> handle_tick}
   end
 
   @impl true
@@ -42,6 +47,16 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
         difference = get_difference(total_bills, 0)
         {:noreply, assign(socket, :income_value_difference, difference)}
     end
+  end
+
+  @impl true
+  def handle_info(:tick, socket) do
+    {:noreply, handle_tick(socket)}
+  end
+
+  def handle_tick(socket) do
+    time = NaiveDateTime.utc_now()
+    assign(socket, :time, time)
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
