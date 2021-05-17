@@ -1,12 +1,15 @@
 defmodule FinanceDashboard.Accounts.Bill do
   use Ecto.Schema
   import Ecto.Changeset
+  alias FinanceDashboard.Accounts.{User}
 
   schema "bills" do
     field :amount, :decimal
     field :initial_due_date, :date
     field :name, :string
     field :paid, :boolean, default: false
+
+    belongs_to(:user, User)
 
     timestamps()
   end

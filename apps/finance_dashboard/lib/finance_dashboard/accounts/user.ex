@@ -1,6 +1,7 @@
 defmodule FinanceDashboard.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias FinanceDashboard.Accounts.{Bill}
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -8,6 +9,8 @@ defmodule FinanceDashboard.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+
+    has_many(:bills, Bill, on_replace: :nilify)
 
     timestamps()
   end
