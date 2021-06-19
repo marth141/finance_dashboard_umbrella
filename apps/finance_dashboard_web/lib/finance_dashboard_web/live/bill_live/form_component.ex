@@ -15,12 +15,16 @@ defmodule FinanceDashboardWeb.BillLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"bill" => bill_params}, socket) do
+    bill_params = assign_user(bill_params, socket)
+
     changeset =
       socket.assigns.bill
       |> Accounts.change_bill(bill_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply,
+     socket
+     |> assign(:changeset, changeset)}
   end
 
   def handle_event("save", %{"bill" => bill_params}, socket) do
@@ -28,6 +32,8 @@ defmodule FinanceDashboardWeb.BillLive.FormComponent do
   end
 
   defp save_bill(socket, :edit, bill_params) do
+    bill_params = assign_user(bill_params, socket)
+
     case Accounts.update_bill(socket.assigns.bill, bill_params) do
       {:ok, _bill} ->
         {:noreply,
@@ -41,6 +47,8 @@ defmodule FinanceDashboardWeb.BillLive.FormComponent do
   end
 
   defp save_bill(socket, :new, bill_params) do
+    bill_params = assign_user(bill_params, socket)
+
     case Accounts.create_bill(bill_params) do
       {:ok, _bill} ->
         {:noreply,
@@ -51,5 +59,9 @@ defmodule FinanceDashboardWeb.BillLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  defp assign_user(bill_params, socket) do
+    Map.put(bill_params, "user_id", socket.assigns.current_user.id)
   end
 end

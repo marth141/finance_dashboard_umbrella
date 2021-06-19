@@ -5,8 +5,15 @@ defmodule FinanceDashboardWeb.BillLive.Index do
   alias FinanceDashboard.Accounts.Bill
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :bills, list_bills())}
+  def mount(_params, session, socket) do
+    socket = assign_current_user(socket, session)
+
+    {:ok,
+     socket
+     |> assign(
+       :bills,
+       list_bills_for_user(socket)
+     )}
   end
 
   @impl true
@@ -37,10 +44,12 @@ defmodule FinanceDashboardWeb.BillLive.Index do
     bill = Accounts.get_bill!(id)
     {:ok, _} = Accounts.delete_bill(bill)
 
-    {:noreply, assign(socket, :bills, list_bills())}
+    {:noreply, assign(socket, :bills, list_bills_for_user(socket))}
   end
 
-  defp list_bills do
-    Accounts.list_bills()
+  defp list_bills_for_user(socket) do
+    user_id = socket.assigns.current_user.id
+
+    Accounts.list_bills_for_user(user_id)
   end
 end

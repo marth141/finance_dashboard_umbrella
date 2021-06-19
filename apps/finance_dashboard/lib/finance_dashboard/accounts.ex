@@ -442,4 +442,9 @@ defmodule FinanceDashboard.Accounts do
   def change_bill(%Bill{} = bill, attrs \\ %{}) do
     Bill.changeset(bill, attrs)
   end
+
+  def list_bills_for_user(user_id) do
+    from(b in Bill, where: b.user_id == ^user_id)
+    |> Repo.all()
+  end
 end

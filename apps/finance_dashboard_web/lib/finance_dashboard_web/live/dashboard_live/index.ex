@@ -4,17 +4,19 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
   alias FinanceDashboard.Accounts
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket) do
       :timer.send_interval(1000, self(), :tick)
     end
 
-    total_bills = Enum.reduce(list_bills(), 0, fn bill, acc -> Decimal.sub(acc, bill.amount) end)
+    socket = assign_current_user(socket, session)
+
+    total_bills = Enum.reduce(list_bills_for_user(socket), 0, fn bill, acc -> Decimal.sub(acc, bill.amount) end)
 
     {:ok,
      socket
-     |> assign(:bills, list_bills())
-     |> assign(:last_bill, list_bills() |> List.last())
+     |> assign(:bills, list_bills_for_user(socket))
+     |> assign(:last_bill, list_bills_for_user(socket) |> List.last())
      |> assign(:income_value, 0)
      |> assign(
        :total_bills,
@@ -105,7 +107,7 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
     Decimal.add(income_value, total_bills)
   end
 
-  defp list_bills do
-    Accounts.list_bills()
+  defp list_bills_for_user(socket) do
+    Accounts.list_bills_for_user(socket.assigns.current_user.id)
   end
 end

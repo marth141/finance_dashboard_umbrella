@@ -1,6 +1,6 @@
 defmodule FinanceDashboardWeb.LiveHelpers do
   import Phoenix.LiveView.Helpers
-
+  import Phoenix.LiveView
   import Phoenix.HTML
 
   @doc """
@@ -17,10 +17,18 @@ defmodule FinanceDashboardWeb.LiveHelpers do
         bill: @bill,
         return_to: Routes.bill_index_path(@socket, :index) %>
   """
-  def live_modal(_socket, component, opts) do
+  def live_modal(socket, component, opts) do
     path = Keyword.fetch!(opts, :return_to)
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
-    live_component(_socket, FinanceDashboardWeb.ModalComponent, modal_opts)
+    live_component(socket, FinanceDashboardWeb.ModalComponent, modal_opts)
+  end
+
+  def assign_current_user(socket, %{"user_token" => user_token}) do
+    assign_new(
+      socket,
+      :current_user,
+      fn -> FinanceDashboard.Accounts.get_user_by_session_token(user_token) end
+    )
   end
 
   def my_date_select(form, field, opts \\ []) do
