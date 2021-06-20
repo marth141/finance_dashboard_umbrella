@@ -2,26 +2,17 @@ defmodule FinanceDashboardWeb.IncomeLive.Index do
   use FinanceDashboardWeb, :live_view
 
   alias FinanceDashboard.Accounts
+  alias FinanceDashboard.Accounts.Income
 
   @impl true
-  def mount(_params, _session, socket) do
-    total_bills = Enum.reduce(list_bills(), 0, fn bill, acc -> Decimal.sub(acc, bill.amount) end)
+  def mount(_params, session, socket) do
+    socket = assign_current_user(socket, session)
 
     {:ok,
      socket
-     |> assign(:bills, list_bills())
-     |> assign(:last_bill, list_bills() |> List.last())
-     |> assign(:income_value, 0)
      |> assign(
-       :total_bills,
-       total_bills
-     )
-     |> assign(:income_value_difference, get_difference(total_bills, 0))
-     |> assign(
-       :income_changeset,
-       FinanceDashboardWeb.DashboardLive.IncomeValue.changeset(
-         FinanceDashboardWeb.DashboardLive.IncomeValue.__struct__(%{income_value: 0})
-       )
+       :incomes,
+       list_incomes_for_user(socket)
      )}
   end
 
@@ -30,67 +21,35 @@ defmodule FinanceDashboardWeb.IncomeLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  @impl true
-  def handle_event("income_change", %{"income_value" => income_value}, socket) do
-    try do
-      total_bills = socket.assigns.total_bills
-      difference = get_difference(total_bills, income_value)
-      {:noreply, assign(socket, :income_value_difference, difference)}
-    rescue
-      _ ->
-        total_bills = socket.assigns.total_bills
-        difference = get_difference(total_bills, 0)
-        {:noreply, assign(socket, :income_value_difference, difference)}
-    end
-  end
-
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Paying Bill?")
-    |> assign(:bill, Accounts.get_bill!(id))
+    |> assign(:page_title, "Edit Income")
+    |> assign(:income, Accounts.get_income!(id))
   end
 
-  defp apply_action(socket, :index, %{"income_value" => income_value}) do
-    try do
-      {income_value, _} = Decimal.parse(income_value)
-
-      total_bills = socket.assigns.total_bills
-
-      difference = get_difference(total_bills, income_value)
-
-      socket
-      |> assign(:income_value, income_value)
-      |> assign(
-        :total_bills,
-        total_bills
-      )
-      |> assign(:income_value_difference, difference)
-    rescue
-      _ ->
-        total_bills = socket.assigns.total_bills
-        difference = get_difference(total_bills, 0)
-
-        socket
-        |> assign(:income_value, 0)
-        |> assign(
-          :total_bills,
-          total_bills
-        )
-        |> assign(:income_value_difference, difference)
-    end
+  defp apply_action(socket, :new, _params) do
+    socket
+    |> assign(:page_title, "New Income")
+    |> assign(:income, %Income{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Bills")
-    |> assign(:bill, nil)
+    |> assign(:page_title, "Listing Income")
+    |> assign(:income, nil)
   end
 
-  defp get_difference(total_bills, income_value) do
-    Decimal.add(income_value, total_bills)
+  @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    income = Accounts.get_income!(id)
+    {:ok, _} = Accounts.delete_income(income)
+
+    {:noreply, assign(socket, :incomes, list_incomes_for_user(socket))}
   end
 
-  defp list_bills do
-    Accounts.list_bills()
+  defp list_incomes_for_user(socket) do
+    user_id = socket.assigns.current_user.id
+
+    Accounts.list_incomes_for_user(user_id)
   end
 end

@@ -6,15 +6,6 @@
     bill: @bill,
     return_to: Routes.dashboard_index_path(@socket, :index) %>
 <% end %>
-<form phx-change="income_change">
-  <div class="w-1/4">
-    <label class="block text-sm font-medium text-gray-700">Income Value</label>
-    <div class="mt-1">
-      <input type="number" id="income_value" name="income_value" value="<%= @income_value %>" onClick="this.select();"
-             class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:shadow-md hover:shadow-md block w-full border-gray-300 rounded-md"/>
-    </div>
-  </div>
-</form>
 <div>
   <%= @time %>
 </div>

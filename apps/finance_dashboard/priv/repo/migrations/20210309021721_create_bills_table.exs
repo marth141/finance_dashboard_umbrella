@@ -1,4 +1,4 @@
-defmodule FinanceDashboard.Repo.Migrations.CreateBills do
+defmodule FinanceDashboard.Repo.Migrations.CreateBillsTable do
   use Ecto.Migration
 
   def change do
