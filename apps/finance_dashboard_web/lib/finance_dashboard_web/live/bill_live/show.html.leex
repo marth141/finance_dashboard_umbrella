@@ -4,6 +4,7 @@
     title: @page_title,
     action: @live_action,
     bill: @bill,
+    user_id: @current_user.id,
     return_to: Routes.bill_show_path(@socket, :show, @bill) %>
 <% end %>
 <!-- This example requires Tailwind CSS v2.0+ -->

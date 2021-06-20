@@ -62,6 +62,6 @@ defmodule FinanceDashboardWeb.BillLive.FormComponent do
   end
 
   defp assign_user(bill_params, socket) do
-    Map.put(bill_params, "user_id", socket.assigns.current_user.id)
+    Map.put(bill_params, "user_id", socket.assigns.user_id)
   end
 end

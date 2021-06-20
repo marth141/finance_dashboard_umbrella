@@ -20,7 +20,7 @@
     title: @page_title,
     action: @live_action,
     bill: @bill,
-    current_user: @current_user,
+    user_id: @current_user.id,
     return_to: Routes.bill_index_path(@socket, :index) %>
 <% end %>
 <!-- This example requires Tailwind CSS v2.0+ -->
