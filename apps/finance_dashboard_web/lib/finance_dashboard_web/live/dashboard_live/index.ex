@@ -23,13 +23,19 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
         Decimal.add(acc, income.amount)
       end)
 
+    total_wallet =
+      Enum.reduce(list_wallets_for_user(user_id), 0, fn wallet, acc ->
+        Decimal.add(acc, wallet.amount)
+      end)
+
     {:ok,
      socket
      |> assign(:bills, list_bills_for_user(user_id))
      |> assign(:last_bill, list_bills_for_user(user_id) |> List.last())
      |> assign(:total_income, total_income)
      |> assign(:total_bills, total_bills)
-     |> assign(:income_value_difference, get_difference(total_bills, total_income))
+     |> assign(:total_wallet, total_wallet)
+     |> assign(:income_value_difference, get_difference(total_wallet, total_income, total_bills))
      |> handle_tick}
   end
 
@@ -59,8 +65,9 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
     |> assign(:page_title, "Finance Dashboard")
   end
 
-  defp get_difference(total_bills, income_value) do
-    Decimal.add(income_value, total_bills)
+  defp get_difference(total_wallet, total_income, total_bills) do
+    Decimal.add(total_income, total_bills)
+    |> Decimal.add(total_wallet)
   end
 
   defp list_bills_for_user(user_id) do
@@ -69,5 +76,9 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
 
   defp list_incomes_for_user(user_id) do
     Accounts.list_incomes_for_user(user_id)
+  end
+
+  defp list_wallets_for_user(user_id) do
+    Accounts.list_wallets_for_user(user_id)
   end
 end

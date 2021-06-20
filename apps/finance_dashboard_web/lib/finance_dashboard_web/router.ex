@@ -40,7 +40,7 @@ defmodule FinanceDashboardWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "liveview/dashboard", metrics: FinanceDashboardWeb.Telemetry
+      live_dashboard "/liveview/dashboard", metrics: FinanceDashboardWeb.Telemetry
     end
   end
 
@@ -82,6 +82,13 @@ defmodule FinanceDashboardWeb.Router do
 
     live "/incomes/:id", IncomeLive.Show, :show
     live "/incomes/:id/show/edit", IncomeLive.Show, :edit
+
+    live "/wallet", WalletLive.Index, :index
+    live "/wallet/new", WalletLive.Index, :new
+    live "/wallet/:id/edit", WalletLive.Index, :edit
+
+    live "/wallets/:id", WalletLive.Show, :show
+    live "/wallets/:id/show/edit", WalletLive.Show, :edit
   end
 
   scope "/", FinanceDashboardWeb do

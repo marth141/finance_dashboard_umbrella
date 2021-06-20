@@ -1,0 +1,67 @@
+<div class="md:flex md:items-center md:justify-between">
+  <div class="flex-1 min-w-0">
+    <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+      Listing Wallets
+    </h1>
+  </div>
+  <div class="mt-4 flex md:mt-0 md:ml-4">
+    <span>
+      <%= live_patch to: Routes.wallet_index_path(@socket, :new), type: "button", class: "inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+        </svg>
+      <% end %>
+    </span>
+  </div>
+</div>
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, FinanceDashboardWeb.WalletLive.FormComponent,
+    id: @wallet.id || :new,
+    title: @page_title,
+    action: @live_action,
+    wallet: @wallet,
+    user_id: @current_user.id,
+    return_to: Routes.wallet_index_path(@socket, :index) %>
+<% end %>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="flex flex-col mt-4">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Amount
+              </th>
+              <th scope="col" class="relative px-6 py-3">
+                <span class="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <%= for wallet <- @wallets do %>
+              <tr id="wallet-<%= wallet.id %>">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <%= wallet.name %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  $<%= wallet.amount %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <span class="text-indigo-600 hover:text-indigo-900"><%= live_redirect "Show", to: Routes.wallet_show_path(@socket, :show, wallet) %></span>
+                  <span class="text-indigo-600 hover:text-indigo-900"><%= live_patch "Edit", to: Routes.wallet_index_path(@socket, :edit, wallet) %></span>
+                  <span class="text-indigo-600 hover:text-indigo-900"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: wallet.id, data: [confirm: "Are you sure?"] %></span>
+                </td>
+              </tr>
+            <% end %>
+            <!-- More items... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
