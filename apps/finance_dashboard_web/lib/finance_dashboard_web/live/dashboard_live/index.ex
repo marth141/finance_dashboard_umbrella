@@ -57,7 +57,7 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
   end
 
   def handle_tick(socket) do
-    time = NaiveDateTime.utc_now()
+    time = NaiveDateTime.local_now() |> NaiveDateTime.truncate(:second)
     assign(socket, :time, time)
   end
 
