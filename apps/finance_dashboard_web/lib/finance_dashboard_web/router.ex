@@ -83,9 +83,9 @@ defmodule FinanceDashboardWeb.Router do
     live "/incomes/:id", IncomeLive.Show, :show
     live "/incomes/:id/show/edit", IncomeLive.Show, :edit
 
-    live "/wallet", WalletLive.Index, :index
-    live "/wallet/new", WalletLive.Index, :new
-    live "/wallet/:id/edit", WalletLive.Index, :edit
+    live "/wallets", WalletLive.Index, :index
+    live "/wallets/new", WalletLive.Index, :new
+    live "/wallets/:id/edit", WalletLive.Index, :edit
 
     live "/wallets/:id", WalletLive.Show, :show
     live "/wallets/:id/show/edit", WalletLive.Show, :edit
