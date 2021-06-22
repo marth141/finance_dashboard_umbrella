@@ -7,6 +7,7 @@ defmodule FinanceDashboard.Accounts.Income do
     field :amount, :decimal
     field :initial_pay_date, :date
     field :name, :string
+    field :frequency, :string
 
     belongs_to(:user, User, on_replace: :update)
 
@@ -15,7 +16,7 @@ defmodule FinanceDashboard.Accounts.Income do
 
   def changeset(income, attrs) do
     income
-    |> cast(attrs, [:amount, :initial_pay_date, :name, :user_id])
-    |> validate_required([:amount, :initial_pay_date, :name, :user_id])
+    |> cast(attrs, [:amount, :initial_pay_date, :name, :user_id, :frequency])
+    |> validate_required([:amount, :initial_pay_date, :name, :user_id, :frequency])
   end
 end

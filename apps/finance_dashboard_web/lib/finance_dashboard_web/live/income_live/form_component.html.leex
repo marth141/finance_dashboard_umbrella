@@ -19,6 +19,11 @@
   <%= number_input f, :amount, step: "any", class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
   <%= error_tag f, :amount %>
 </div>
+<div class="col-span-6 sm:col-span-3">
+  <%= label f, :frequency, class: "block text-sm font-medium text-gray-700" %>
+  <%= select f, :frequency, ["Monthly", "Bi-Weekly"], class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+  <%= error_tag f, :frequency %>
+</div>
 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
   <%= submit "Save", phx_disable_with: "Saving...", class: "bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
 </div>

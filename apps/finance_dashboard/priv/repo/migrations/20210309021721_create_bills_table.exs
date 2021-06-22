@@ -8,6 +8,7 @@ defmodule FinanceDashboard.Repo.Migrations.CreateBillsTable do
       add :initial_due_date, :date
       add :amount, :decimal
       add :paid, :boolean, default: false, null: false
+      add :frequency, :string
 
       timestamps()
     end

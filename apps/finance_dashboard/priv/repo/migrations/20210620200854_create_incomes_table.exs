@@ -7,6 +7,7 @@ defmodule FinanceDashboard.Repo.Migrations.CreateIncomesTable do
       add :name, :string
       add :initial_pay_date, :date
       add :amount, :decimal
+      add :frequency, :string
 
       timestamps()
     end

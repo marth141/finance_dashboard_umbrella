@@ -8,6 +8,7 @@ defmodule FinanceDashboard.Accounts.Bill do
     field :initial_due_date, :date
     field :name, :string
     field :paid, :boolean, default: false
+    field :frequency, :string
 
     belongs_to(:user, User, on_replace: :update)
 
@@ -17,7 +18,7 @@ defmodule FinanceDashboard.Accounts.Bill do
   @doc false
   def changeset(bill, attrs) do
     bill
-    |> cast(attrs, [:name, :initial_due_date, :amount, :paid, :user_id])
-    |> validate_required([:name, :initial_due_date, :amount, :paid, :user_id])
+    |> cast(attrs, [:name, :initial_due_date, :amount, :paid, :user_id, :frequency])
+    |> validate_required([:name, :initial_due_date, :amount, :paid, :user_id, :frequency])
   end
 end

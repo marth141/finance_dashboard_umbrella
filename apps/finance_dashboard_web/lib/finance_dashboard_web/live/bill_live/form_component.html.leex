@@ -20,6 +20,11 @@
   <%= error_tag f, :amount %>
 </div>
 <div class="col-span-6 sm:col-span-3">
+  <%= label f, :frequency, class: "block text-sm font-medium text-gray-700" %>
+  <%= select f, :frequency, ["Monthly", "Bi-Weekly"], class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+  <%= error_tag f, :frequency %>
+</div>
+<div class="col-span-6 sm:col-span-3">
   <%= label f, :paid, class: "block text-sm font-medium text-gray-700" %>
   <%= checkbox f, :paid %>
   <%= error_tag f, :paid %>
