@@ -18,5 +18,6 @@ defmodule FinanceDashboard.Accounts.Income do
     income
     |> cast(attrs, [:amount, :initial_pay_date, :name, :user_id, :frequency])
     |> validate_required([:amount, :initial_pay_date, :name, :user_id, :frequency])
+    |> foreign_key_constraint(:user_id)
   end
 end

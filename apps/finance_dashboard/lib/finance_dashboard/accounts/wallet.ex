@@ -16,5 +16,6 @@ defmodule FinanceDashboard.Accounts.Wallet do
     wallet
     |> cast(attrs, [:amount, :name, :user_id])
     |> validate_required([:amount, :name, :user_id])
+    |> foreign_key_constraint(:user_id)
   end
 end

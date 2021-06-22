@@ -602,4 +602,186 @@ defmodule FinanceDashboard.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_bill(bill)
     end
   end
+
+  describe "incomes" do
+    alias FinanceDashboard.Accounts.Income
+
+    @valid_attrs %{
+      amount: "120.5",
+      initial_pay_date: ~D[2010-04-17],
+      name: "some name",
+      frequency: "some frequency"
+    }
+    @update_attrs %{
+      amount: "456.7",
+      initial_pay_date: ~D[2011-05-18],
+      name: "some updated name",
+      frequency: "some updated frequency"
+    }
+    @invalid_attrs %{
+      amount: nil,
+      initial_due_date: nil,
+      name: nil,
+      frequency: nil,
+      user_id: nil
+    }
+
+    def income_fixture(attrs \\ %{}) do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      {:ok, income} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Enum.into(%{user_id: user.id})
+        |> Accounts.create_income()
+
+      income
+    end
+
+    test "list_incomes/0 returns all incomes" do
+      income = income_fixture()
+      assert Accounts.list_incomes() == [income]
+    end
+
+    test "get_income!/1 returns the income with given id" do
+      income = income_fixture()
+      assert Accounts.get_income!(income.id) == income
+    end
+
+    test "create_income/1 with valid data creates a income" do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:ok, %Income{} = income} =
+               Accounts.create_income(@valid_attrs |> Enum.into(%{user_id: user.id}))
+
+      assert income.amount == Decimal.new("120.5")
+      assert income.initial_pay_date == ~D[2010-04-17]
+      assert income.name == "some name"
+      assert income.frequency == "some frequency"
+      assert is_number(income.user_id)
+    end
+
+    test "create_income/1 with invalid data returns error changeset" do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.create_income(@invalid_attrs |> Enum.into(%{user_id: user.id}))
+    end
+
+    test "update_income/2 with valid data updates the income" do
+      income = income_fixture()
+      assert {:ok, %Income{} = income} = Accounts.update_income(income, @update_attrs)
+      assert income.amount == Decimal.new("456.7")
+      assert income.initial_pay_date == ~D[2011-05-18]
+      assert income.name == "some updated name"
+      assert income.frequency == "some updated frequency"
+      assert is_number(income.user_id)
+    end
+
+    test "update_income/2 with invalid data returns error changeset" do
+      income = income_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_income(income, @invalid_attrs)
+      assert income == Accounts.get_income!(income.id)
+    end
+
+    test "delete_income/1 deletes the income" do
+      income = income_fixture()
+      assert {:ok, %Income{}} = Accounts.delete_income(income)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_income!(income.id) end
+    end
+
+    test "change_bill/1 returns a income changeset" do
+      income = income_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_income(income)
+    end
+  end
+
+  describe "wallets" do
+    alias FinanceDashboard.Accounts.Wallet
+
+    @valid_attrs %{
+      amount: "120.5",
+      name: "some name",
+    }
+    @update_attrs %{
+      amount: "456.7",
+      name: "some updated name",
+    }
+    @invalid_attrs %{
+      amount: nil,
+      name: nil,
+      user_id: nil
+    }
+
+    def wallet_fixture(attrs \\ %{}) do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      {:ok, wallet} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Enum.into(%{user_id: user.id})
+        |> Accounts.create_wallet()
+
+      wallet
+    end
+
+    test "list_wallets/0 returns all wallets" do
+      wallet = wallet_fixture()
+      assert Accounts.list_wallets() == [wallet]
+    end
+
+    test "get_wallet!/1 returns the wallet with given id" do
+      wallet = wallet_fixture()
+      assert Accounts.get_wallet!(wallet.id) == wallet
+    end
+
+    test "create_wallet/1 with valid data creates a wallet" do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:ok, %Wallet{} = wallet} =
+               Accounts.create_wallet(@valid_attrs |> Enum.into(%{user_id: user.id}))
+
+      assert wallet.amount == Decimal.new("120.5")
+      assert wallet.name == "some name"
+      assert is_number(wallet.user_id)
+    end
+
+    test "create_wallet/1 with invalid data returns error changeset" do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.create_wallet(@invalid_attrs |> Enum.into(%{user_id: user.id}))
+    end
+
+    test "update_wallet/2 with valid data updates the wallet" do
+      wallet = wallet_fixture()
+      assert {:ok, %Wallet{} = wallet} = Accounts.update_wallet(wallet, @update_attrs)
+      assert wallet.amount == Decimal.new("456.7")
+      assert wallet.name == "some updated name"
+      assert is_number(wallet.user_id)
+    end
+
+    test "update_wallet/2 with invalid data returns error changeset" do
+      wallet = wallet_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_wallet(wallet, @invalid_attrs)
+      assert wallet == Accounts.get_wallet!(wallet.id)
+    end
+
+    test "delete_wallet/1 deletes the wallet" do
+      wallet = wallet_fixture()
+      assert {:ok, %Wallet{}} = Accounts.delete_wallet(wallet)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_wallet!(wallet.id) end
+    end
+
+    test "change_bill/1 returns a wallet changeset" do
+      wallet = wallet_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_wallet(wallet)
+    end
+  end
 end
