@@ -509,20 +509,32 @@ defmodule FinanceDashboard.AccountsTest do
       amount: "120.5",
       initial_due_date: ~D[2010-04-17],
       name: "some name",
-      paid: true
+      paid: true,
+      frequency: "some frequency"
     }
     @update_attrs %{
       amount: "456.7",
       initial_due_date: ~D[2011-05-18],
       name: "some updated name",
-      paid: false
+      paid: false,
+      frequency: "some updated frequency"
     }
-    @invalid_attrs %{amount: nil, initial_due_date: nil, name: nil, paid: nil}
+    @invalid_attrs %{
+      amount: nil,
+      initial_due_date: nil,
+      name: nil,
+      paid: nil,
+      frequency: nil
+    }
 
     def bill_fixture(attrs \\ %{}) do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
       {:ok, bill} =
         attrs
         |> Enum.into(@valid_attrs)
+        |> Enum.into(%{user_id: user.id})
         |> Accounts.create_bill()
 
       bill
@@ -539,15 +551,26 @@ defmodule FinanceDashboard.AccountsTest do
     end
 
     test "create_bill/1 with valid data creates a bill" do
-      assert {:ok, %Bill{} = bill} = Accounts.create_bill(@valid_attrs)
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:ok, %Bill{} = bill} =
+               Accounts.create_bill(@valid_attrs |> Enum.into(%{user_id: user.id}))
+
       assert bill.amount == Decimal.new("120.5")
       assert bill.initial_due_date == ~D[2010-04-17]
       assert bill.name == "some name"
       assert bill.paid == true
+      assert bill.frequency == "some frequency"
+      assert is_number(bill.user_id)
     end
 
     test "create_bill/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_bill(@invalid_attrs)
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.create_bill(@invalid_attrs |> Enum.into(%{user_id: user.id}))
     end
 
     test "update_bill/2 with valid data updates the bill" do
@@ -557,6 +580,8 @@ defmodule FinanceDashboard.AccountsTest do
       assert bill.initial_due_date == ~D[2011-05-18]
       assert bill.name == "some updated name"
       assert bill.paid == false
+      assert bill.frequency == "some updated frequency"
+      assert is_number(bill.user_id)
     end
 
     test "update_bill/2 with invalid data returns error changeset" do

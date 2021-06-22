@@ -20,5 +20,6 @@ defmodule FinanceDashboard.Accounts.Bill do
     bill
     |> cast(attrs, [:name, :initial_due_date, :amount, :paid, :user_id, :frequency])
     |> validate_required([:name, :initial_due_date, :amount, :paid, :user_id, :frequency])
+    |> foreign_key_constraint(:user_id)
   end
 end
