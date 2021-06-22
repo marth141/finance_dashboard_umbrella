@@ -524,7 +524,8 @@ defmodule FinanceDashboard.AccountsTest do
       initial_due_date: nil,
       name: nil,
       paid: nil,
-      frequency: nil
+      frequency: nil,
+      user_id: nil
     }
 
     def bill_fixture(attrs \\ %{}) do
