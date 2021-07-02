@@ -13,7 +13,12 @@ defmodule FinanceDashboardWeb.UserResetPasswordControllerTest do
     test "renders the reset password page", %{conn: conn} do
       conn = get(conn, Routes.user_reset_password_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Forgot your password?</h1>"
+
+      assert response =~ """
+                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                   Forgot your password?
+                 </h2>
+             """
     end
   end
 
@@ -54,7 +59,12 @@ defmodule FinanceDashboardWeb.UserResetPasswordControllerTest do
 
     test "renders reset password", %{conn: conn, token: token} do
       conn = get(conn, Routes.user_reset_password_path(conn, :edit, token))
-      assert html_response(conn, 200) =~ "<h1>Reset password</h1>"
+
+      assert html_response(conn, 200) =~ """
+                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                   Reset password
+                 </h2>
+             """
     end
 
     test "does not render reset password with invalid token", %{conn: conn} do
@@ -99,7 +109,13 @@ defmodule FinanceDashboardWeb.UserResetPasswordControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Reset password</h1>"
+
+      assert response =~ """
+                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                   Reset password
+                 </h2>
+             """
+
       assert response =~ "should be at least 12 character(s)"
       assert response =~ "does not match password"
     end

@@ -2,8 +2,12 @@ defmodule FinanceDashboardWeb.PageLive do
   use FinanceDashboardWeb, :live_view
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+  def mount(_params, session, socket) do
+    if is_nil(session["user_token"]) do
+      {:ok, socket |> assign(query: "", results: %{}) |> assign(current_user: false)}
+    else
+      {:ok, socket |> assign(query: "", results: %{}) |> assign_current_user(session)}
+    end
   end
 
   @impl true

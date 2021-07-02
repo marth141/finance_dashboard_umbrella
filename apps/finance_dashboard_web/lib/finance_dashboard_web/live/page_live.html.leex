@@ -1,4 +1,15 @@
 <section class="phx-hero">
+  <ul>
+    <%= if @current_user do %>
+      <li><%= @current_user.email %></li>
+      <li><%= link "Settings", to: Routes.user_settings_path(@socket, :edit) %></li>
+      <li><%= link "Log out", to: Routes.user_session_path(@socket, :delete), method: :delete %></li>
+    <% else %>
+      <li><%= link "Register", to: Routes.user_registration_path(@socket, :new) %></li>
+      <li><%= link "Log in", to: Routes.user_session_path(@socket, :new) %></li>
+    <% end %>
+  </ul>
+  <br/>
   <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
   <p>Peace of mind from prototype to production</p>
 
