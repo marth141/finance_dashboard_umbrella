@@ -543,7 +543,7 @@ defmodule FinanceDashboard.AccountsTest do
 
     test "list_bills/0 returns all bills" do
       bill = bill_fixture()
-      assert Accounts.list_bills() == [bill]
+      assert Accounts.list_bills() |> List.last == bill
     end
 
     test "get_bill!/1 returns the bill with given id" do
@@ -641,7 +641,7 @@ defmodule FinanceDashboard.AccountsTest do
 
     test "list_incomes/0 returns all incomes" do
       income = income_fixture()
-      assert Accounts.list_incomes() == [income]
+      assert Accounts.list_incomes() |> List.last == income
     end
 
     test "get_income!/1 returns the income with given id" do
@@ -731,7 +731,7 @@ defmodule FinanceDashboard.AccountsTest do
 
     test "list_wallets/0 returns all wallets" do
       wallet = wallet_fixture()
-      assert Accounts.list_wallets() == [wallet]
+      assert Accounts.list_wallets() |> List.last == wallet
     end
 
     test "get_wallet!/1 returns the wallet with given id" do
