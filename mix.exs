@@ -40,7 +40,7 @@ defmodule FinanceDashboard.Umbrella.MixProject do
     [
       # run `mix setup` in all child apps
       setup: ["cmd mix setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run apps/repo/priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run apps/finance_dashboard/priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
     ]
   end

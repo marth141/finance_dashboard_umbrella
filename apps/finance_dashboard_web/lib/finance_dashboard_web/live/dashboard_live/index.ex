@@ -31,6 +31,7 @@ defmodule FinanceDashboardWeb.DashboardLive.Index do
     {:ok,
      socket
      |> assign(:bills, list_bills_for_user(user_id))
+     |> assign(:incomes, list_incomes_for_user(user_id))
      |> assign(:last_bill, list_bills_for_user(user_id) |> List.last())
      |> assign(:total_income, total_income)
      |> assign(:total_bills, total_bills)
