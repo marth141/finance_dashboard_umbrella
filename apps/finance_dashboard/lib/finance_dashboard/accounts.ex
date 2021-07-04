@@ -383,14 +383,16 @@ defmodule FinanceDashboard.Accounts do
 
   ## Examples
 
-      iex> create_bill(%{field: value})
+      iex> create_bill(%{field: value}, %{field: value})
       {:ok, %Bill{}}
 
-      iex> create_bill(%{field: bad_value})
+      iex> create_bill(%{field: bad_value}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_bill(attrs \\ %{}) do
+  def create_bill(attrs \\ %{}, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     %Bill{}
     |> Bill.changeset(attrs)
     |> Repo.insert()
@@ -401,14 +403,16 @@ defmodule FinanceDashboard.Accounts do
 
   ## Examples
 
-      iex> update_bill(bill, %{field: new_value})
+      iex> update_bill(bill, %{field: new_value}, %{field: new_value})
       {:ok, %Bill{}}
 
-      iex> update_bill(bill, %{field: bad_value})
+      iex> update_bill(bill, %{field: bad_value}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_bill(%Bill{} = bill, attrs) do
+  def update_bill(%Bill{} = bill, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     bill
     |> Bill.changeset(attrs)
     |> Repo.update()
@@ -438,8 +442,17 @@ defmodule FinanceDashboard.Accounts do
       iex> change_bill(bill)
       %Ecto.Changeset{data: %Bill{}}
 
+      iex> change_bill(bill, attrs, current_user)
+      %Ecto.Changeset{data: %Bill{}}
+
   """
   def change_bill(%Bill{} = bill, attrs \\ %{}) do
+    Bill.changeset(bill, attrs)
+  end
+
+  def change_bill(%Bill{} = bill, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     Bill.changeset(bill, attrs)
   end
 
@@ -484,10 +497,10 @@ defmodule FinanceDashboard.Accounts do
 
   ## Examples
 
-      iex> create_income(%{field: value})
+      iex> create_income(%{field: value}, %{field: value})
       {:ok, %Income{}}
 
-      iex> create_income(%{field: bad_value})
+      iex> create_income(%{field: bad_value}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -504,10 +517,10 @@ defmodule FinanceDashboard.Accounts do
 
   ## Examples
 
-      iex> update_income(income, %{field: new_value})
+      iex> update_income(income, %{field: new_value}, %{field: new_value})
       {:ok, %Income{}}
 
-      iex> update_income(income, %{field: bad_value})
+      iex> update_income(income, %{field: bad_value}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -541,6 +554,9 @@ defmodule FinanceDashboard.Accounts do
   ## Examples
 
       iex> change_income(income)
+      %Ecto.Changeset{data: %Income{}}
+
+      iex> change_income(income, attrs, change_user)
       %Ecto.Changeset{data: %Income{}}
 
   """
