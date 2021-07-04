@@ -491,7 +491,9 @@ defmodule FinanceDashboard.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_income(attrs \\ %{}) do
+  def create_income(attrs \\ %{}, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     %Income{}
     |> Income.changeset(attrs)
     |> Repo.insert()
@@ -509,7 +511,9 @@ defmodule FinanceDashboard.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_income(%Income{} = income, attrs) do
+  def update_income(%Income{} = income, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     income
     |> Income.changeset(attrs)
     |> Repo.update()
@@ -541,6 +545,12 @@ defmodule FinanceDashboard.Accounts do
 
   """
   def change_income(%Income{} = income, attrs \\ %{}) do
+    Income.changeset(income, attrs)
+  end
+
+  def change_income(%Income{} = income, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     Income.changeset(income, attrs)
   end
 

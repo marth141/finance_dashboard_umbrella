@@ -15,11 +15,9 @@ defmodule FinanceDashboardWeb.IncomeLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"income" => income_params}, socket) do
-    income_params = assign_user(income_params, socket)
-
     changeset =
       socket.assigns.income
-      |> Accounts.change_income(income_params)
+      |> Accounts.change_income(income_params, socket.assigns.current_user)
       |> Map.put(:action, :validate)
 
     {:noreply,
@@ -32,9 +30,7 @@ defmodule FinanceDashboardWeb.IncomeLive.FormComponent do
   end
 
   defp save_income(socket, :edit, income_params) do
-    income_params = assign_user(income_params, socket)
-
-    case Accounts.update_income(socket.assigns.income, income_params) do
+    case Accounts.update_income(socket.assigns.income, income_params, socket.assigns.current_user) do
       {:ok, _income} ->
         {:noreply,
          socket
@@ -47,9 +43,7 @@ defmodule FinanceDashboardWeb.IncomeLive.FormComponent do
   end
 
   defp save_income(socket, :new, income_params) do
-    income_params = assign_user(income_params, socket)
-
-    case Accounts.create_income(income_params) do
+    case Accounts.create_income(income_params, socket.assigns.current_user) do
       {:ok, _income} ->
         {:noreply,
          socket
@@ -59,9 +53,5 @@ defmodule FinanceDashboardWeb.IncomeLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-  end
-
-  defp assign_user(income_params, socket) do
-    Map.put(income_params, "user_id", socket.assigns.user_id)
   end
 end
