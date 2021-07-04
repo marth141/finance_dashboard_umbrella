@@ -28,7 +28,7 @@ defmodule FinanceDashboardWeb.DashboardLive.FormComponent do
   end
 
   defp save_bill(socket, :edit, bill_params) do
-    case Accounts.update_bill(socket.assigns.bill, bill_params) do
+    case Accounts.update_bill(socket.assigns.bill, bill_params, socket.assigns.current_user) do
       {:ok, _bill} ->
         {:noreply,
          socket

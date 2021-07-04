@@ -11,7 +11,8 @@ use Mix.Config
 
 # Configure Mix tasks and generators
 config :finance_dashboard,
-  ecto_repos: [FinanceDashboard.Repo]
+  ecto_repos: [FinanceDashboard.Repo],
+  event_stores: [FinanceDashboard.EventStore]
 
 config :finance_dashboard_web,
   ecto_repos: [FinanceDashboard.Repo],

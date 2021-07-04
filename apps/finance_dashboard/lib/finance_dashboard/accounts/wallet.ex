@@ -3,11 +3,13 @@ defmodule FinanceDashboard.Accounts.Wallet do
   import Ecto.Changeset
   alias FinanceDashboard.Accounts.{User}
 
+  @primary_key {:id, :binary_id, autogenerate: false}
+  @foreign_key_type :binary_id
   schema "wallets" do
     field :amount, :decimal
     field :name, :string
 
-    belongs_to(:user, User, on_replace: :update)
+    belongs_to(:user, User, on_replace: :update, type: :integer)
 
     timestamps()
   end

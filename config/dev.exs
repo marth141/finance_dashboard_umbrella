@@ -9,6 +9,14 @@ config :finance_dashboard, FinanceDashboard.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :finance_dashboard, FinanceDashboard.EventStore,
+  serializer: EventStore.TermSerializer,
+  username: "postgres",
+  password: "postgres",
+  database: "finance_dashboard_eventstore_dev",
+  hostname: "localhost",
+  pool_size: 10
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

@@ -7,12 +7,10 @@ defmodule FinanceDashboard.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       FinanceDashboard.Repo,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: FinanceDashboard.PubSub}
-      # Start a worker by calling: FinanceDashboard.Worker.start_link(arg)
-      # {FinanceDashboard.Worker, arg}
+      {Phoenix.PubSub, name: FinanceDashboard.PubSub},
+      {FinanceDashboard.Commanded, []},
+      FinanceDashboard.Projector,
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: FinanceDashboard.Supervisor)

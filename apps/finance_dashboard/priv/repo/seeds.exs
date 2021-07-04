@@ -11,16 +11,17 @@
 # and so on) as they will fail if something goes wrong.
 alias FinanceDashboard.Accounts
 
-%{
+
+Accounts.register_user(%{
   email: "ncasados@live.com",
   password: "test_password1",
   confirmed_at: NaiveDateTime.local_now(),
   inserted_at: NaiveDateTime.local_now(),
   updated_at: NaiveDateTime.local_now()
-}
-|> Accounts.register_user()
+})
 
 %{
+  id: Ecto.UUID.generate(),
   amount: Decimal.new("100.37"),
   name: "First Wallet",
   user_id: 1,
