@@ -453,6 +453,8 @@ defmodule FinanceDashboard.Accounts do
   def change_bill(%Bill{} = bill, attrs, current_user) do
     attrs = Map.put(attrs, "user_id", current_user.id)
 
+    figure_next_due(attrs) |> IO.inspect()
+
     Bill.changeset(bill, attrs)
   end
 
@@ -566,6 +568,8 @@ defmodule FinanceDashboard.Accounts do
 
   def change_income(%Income{} = income, attrs, current_user) do
     attrs = Map.put(attrs, "user_id", current_user.id)
+
+    figure_next_due(attrs) |> IO.inspect()
 
     Income.changeset(income, attrs)
   end
@@ -681,11 +685,70 @@ defmodule FinanceDashboard.Accounts do
   def change_wallet(%Wallet{} = wallet, attrs, current_user) do
     attrs = Map.put(attrs, "user_id", current_user.id)
 
+    figure_next_due(attrs) |> IO.inspect()
+
     Wallet.changeset(wallet, attrs)
   end
 
   def list_wallets_for_user(user_id) do
     from(w in Wallet, where: w.user_id == ^user_id)
     |> Repo.all()
+  end
+
+  def figure_next_due(%{
+        "amount" => _amount,
+        "initial_due_date" => initial_due_date,
+        "name" => _name,
+        "paid" => _paid,
+        "frequency" => frequency,
+        "user_id" => _user_id
+      } = attrs) do
+    %{"day" => day, "month" => month, "year" => year} = initial_due_date
+
+    {day, _} = Integer.parse(day)
+
+    {month, _} = Integer.parse(month)
+
+    {year, _} = Integer.parse(year)
+
+    next_due_date = Date.new!(year, month, day)
+
+    days_in_month = Date.days_in_month(next_due_date)
+
+    case frequency do
+      "Monthly" ->
+        Map.put(attrs, "next_due_date", Date.add(next_due_date, days_in_month))
+
+      "Bi-Weekly" ->
+        Map.put(attrs, "next_due_date", Date.add(next_due_date, 15))
+    end
+  end
+
+  def figure_next_due(%{
+        "amount" => _amount,
+        "initial_pay_date" => initial_pay_date,
+        "name" => _name,
+        "frequency" => frequency,
+        "user_id" => _user_id
+      } = attrs) do
+    %{"day" => day, "month" => month, "year" => year} = initial_pay_date
+
+    {day, _} = Integer.parse(day)
+
+    {month, _} = Integer.parse(month)
+
+    {year, _} = Integer.parse(year)
+
+    next_due_date = Date.new!(year, month, day)
+
+    days_in_month = Date.days_in_month(next_due_date)
+
+    case frequency do
+      "Monthly" ->
+        Map.put(attrs, "next_pay_date", Date.add(next_due_date, days_in_month))
+
+      "Bi-Weekly" ->
+        Map.put(attrs, "next_pay_date", Date.add(next_due_date, 15))
+    end
   end
 end
