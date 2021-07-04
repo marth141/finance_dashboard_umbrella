@@ -21,7 +21,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.register_user()
 
 %{
-  amount: 100.37,
+  amount: Decimal.new("100.37"),
   name: "First Wallet",
   user_id: 1,
   inserted_at: NaiveDateTime.local_now(),
@@ -30,7 +30,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_wallet()
 
 %{
-  amount: 1196.45,
+  amount: Decimal.new("1196.45"),
   initial_pay_date: ~D[2021-06-02],
   name: "Day Job",
   frequency: "Bi-Weekly",
@@ -41,7 +41,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_income()
 
 %{
-  amount: (949.00 / 3) |> Float.round(2),
+  amount: Decimal.new("316.33"),
   initial_due_date: ~D[2021-06-01],
   name: "Rent 1/3",
   paid: false,
@@ -53,7 +53,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_bill()
 
 %{
-  amount: (949.00 / 3) |> Float.round(2),
+  amount: Decimal.new("316.33"),
   initial_due_date: ~D[2021-06-01],
   name: "Rent 2/3",
   paid: false,
@@ -65,7 +65,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_bill()
 
 %{
-  amount: 177.31,
+  amount: Decimal.new("177.31"),
   initial_due_date: ~D[2021-06-11],
   name: "UCCU Car",
   paid: false,
@@ -77,7 +77,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_bill()
 
 %{
-  amount: 45.00,
+  amount: Decimal.new("45.00"),
   initial_due_date: ~D[2021-06-01],
   name: "Internet",
   paid: false,
@@ -89,7 +89,7 @@ alias FinanceDashboard.Accounts
 |> Accounts.create_bill()
 
 %{
-  amount: 100.00,
+  amount: Decimal.new("100.00"),
   initial_due_date: ~D[2021-06-05],
   name: "Credit Card",
   paid: false,
