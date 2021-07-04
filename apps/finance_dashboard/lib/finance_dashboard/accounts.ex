@@ -556,7 +556,7 @@ defmodule FinanceDashboard.Accounts do
       iex> change_income(income)
       %Ecto.Changeset{data: %Income{}}
 
-      iex> change_income(income, attrs, change_user)
+      iex> change_income(income, attrs, current_user)
       %Ecto.Changeset{data: %Income{}}
 
   """
@@ -611,14 +611,16 @@ defmodule FinanceDashboard.Accounts do
 
   ## Examples
 
-      iex> create_wallet(%{field: value})
+      iex> create_wallet(%{field: value}, %{field: value})
       {:ok, %Wallet{}}
 
-      iex> create_wallet(%{field: bad_value})
+      iex> create_wallet(%{field: bad_value}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_wallet(attrs \\ %{}) do
+  def create_wallet(attrs \\ %{}, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     %Wallet{}
     |> Wallet.changeset(attrs)
     |> Repo.insert()
@@ -636,7 +638,9 @@ defmodule FinanceDashboard.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_wallet(%Wallet{} = wallet, attrs) do
+  def update_wallet(%Wallet{} = wallet, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     wallet
     |> Wallet.changeset(attrs)
     |> Repo.update()
@@ -666,8 +670,17 @@ defmodule FinanceDashboard.Accounts do
       iex> change_wallet(wallet)
       %Ecto.Changeset{data: %Wallet{}}
 
+      iex> change_wallet(wallet, attrs, current_user)
+      %Ecto.Changeset{data: %Wallet{}}
+
   """
   def change_wallet(%Wallet{} = wallet, attrs \\ %{}) do
+    Wallet.changeset(wallet, attrs)
+  end
+
+  def change_wallet(%Wallet{} = wallet, attrs, current_user) do
+    attrs = Map.put(attrs, "user_id", current_user.id)
+
     Wallet.changeset(wallet, attrs)
   end
 

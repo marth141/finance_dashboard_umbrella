@@ -15,11 +15,9 @@ defmodule FinanceDashboardWeb.WalletLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"wallet" => wallet_params}, socket) do
-    wallet_params = assign_user(wallet_params, socket)
-
     changeset =
       socket.assigns.wallet
-      |> Accounts.change_wallet(wallet_params)
+      |> Accounts.change_wallet(wallet_params, socket.assigns.current_user)
       |> Map.put(:action, :validate)
 
     {:noreply,
@@ -32,9 +30,7 @@ defmodule FinanceDashboardWeb.WalletLive.FormComponent do
   end
 
   defp save_wallet(socket, :edit, wallet_params) do
-    wallet_params = assign_user(wallet_params, socket)
-
-    case Accounts.update_wallet(socket.assigns.wallet, wallet_params) do
+    case Accounts.update_wallet(socket.assigns.wallet, wallet_params, socket.assigns.current_user) do
       {:ok, _wallet} ->
         {:noreply,
          socket
@@ -47,9 +43,7 @@ defmodule FinanceDashboardWeb.WalletLive.FormComponent do
   end
 
   defp save_wallet(socket, :new, wallet_params) do
-    wallet_params = assign_user(wallet_params, socket)
-
-    case Accounts.create_wallet(wallet_params) do
+    case Accounts.create_wallet(wallet_params, socket.assigns.current_user) do
       {:ok, _wallet} ->
         {:noreply,
          socket
@@ -59,9 +53,5 @@ defmodule FinanceDashboardWeb.WalletLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
-  end
-
-  defp assign_user(wallet_params, socket) do
-    Map.put(wallet_params, "user_id", socket.assigns.user_id)
   end
 end
